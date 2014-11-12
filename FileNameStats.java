@@ -84,7 +84,9 @@ public class FileNameStats {
                     } else {
                         long weight = getNameWeight( f.getName() );
                         incSummary( weight );
-                        appendStatfile( statfile, f.getName(), weight );
+                        if ( weight != 0 ) {
+                            appendStatfile( statfile, f.getName(), weight );
+                        }
                     }
                 }
             }
