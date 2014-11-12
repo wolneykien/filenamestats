@@ -76,7 +76,7 @@ public class FileNameStats {
                         stats.calculatePath( f.getAbsolutePath() );
                         long weight = stats.getSummary();
                         incSummary( weight );
-                        appendStatfile( statfile, f.getName(), weight );
+                        appendStatfile( statfile, f.getName() + "/", weight );
                     } else {
                         long weight = getNameWeight( f.getName() );
                         incSummary( weight );
