@@ -3,7 +3,7 @@
 
 PROG_NAME='jpegsum'
 STATNAME="jpegsum.txt"
-CLASSPATH='class'
+CLASSPATH="${0%/*}/class"
 MAINCLASS='name.wolneykien.filenamestats.FileNameStats'
 PATTERN='-([0-9]+).[Jj][Pp][Ee]?[Gg]$'
 

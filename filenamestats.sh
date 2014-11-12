@@ -2,7 +2,7 @@
 
 
 PROG_NAME='filenamestats'
-CLASSPATH='class'
+CLASSPATH="${0%/*}/class"
 MAINCLASS='name.wolneykien.filenamestats.FileNameStats'
 
 java -cp "$CLASSPATH" \
