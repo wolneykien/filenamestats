@@ -12,7 +12,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-package name.wolneykien.FileNameStats;
+package name.wolneykien.filenamestats;
 
 import java.lang.String;
 import java.lang.Exception;
@@ -30,7 +30,7 @@ public class FileNameStats {
     public static String DEF_STATFILE = "stats.txt";
     
     private Pattern pattern = null;
-    private double summary = 0;
+    private long summary = 0;
     private String statName = null;
 
 
@@ -66,60 +66,60 @@ public class FileNameStats {
     throws java.io.IOException
     {
         if ( path.isDirectory() ) {
+            File statfile = new File ( path, this.statName );
+            statfile.delete();
             File[] list = path.listFiles();
             if ( list != null ) {
                 for ( File f : list ) {
                     if ( f.isDirectory() ) {
                         FileNameStats stats = new FileNameStats( this );
                         stats.calculatePath( f.getAbsolutePath() );
-                        double weight = stats.getSummary();
+                        long weight = stats.getSummary();
                         incSummary( weight );
-                        appendStatfile( path, f.getName(), weight );
+                        appendStatfile( statfile, f.getName(), weight );
                     } else {
-                        double weight = getNameWeight( f.getName() );
+                        long weight = getNameWeight( f.getName() );
                         incSummary( weight );
-                        appendStatfile( path, f.getName(), weight );
+                        appendStatfile( statfile, f.getName(), weight );
                     }
                 }
             }
         } else {
-            double weight = getNameWeight( path.getName() );
+            long weight = getNameWeight( path.getName() );
             incSummary( weight );
         }
     }
 
-    public double getNameWeight( String name ) {
+    public long getNameWeight( String name ) {
         Matcher m = this.pattern.matcher( name );
         if ( m.find() ) {
             if ( m.groupCount() > 0 ) {
-                double weight = Double.parseDouble( m.group( 1 ) );
-                return 1.0 * weight;
+                long weight = Long.parseLong( m.group( 1 ) );
+                return 1 * weight;
             } else {
-                return 1.0;
+                return 1;
             }
         } else {
-            return 0.0;
+            return 0;
         }
     }
 
-    public double getSummary () {
+    public long getSummary () {
         return this.summary;
     }
 
-    public void incSummary( double weight ) {
+    public void incSummary( long weight ) {
         this.summary = this.summary + weight;
     }
 
-    protected void appendStatfile( File dir, String name, double weight )
+    protected void appendStatfile( File statfile, String name, long weight )
     throws java.io.IOException
     {
         PrintWriter statWriter =
-            new PrintWriter (
-                  new FileWriter( new File ( dir, this.statName ),
-                                  true ),
-                  true );
+            new PrintWriter ( new FileWriter( statfile, true ),
+                              true );
 
-        statWriter.format( "%s\\t%.2f\\n", name, weight );
+        statWriter.format( "%s\t%d\n", name, weight );
         statWriter.close();
     }
 
