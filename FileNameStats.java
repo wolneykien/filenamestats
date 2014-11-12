@@ -26,8 +26,12 @@ import java.lang.System;
 
 public class FileNameStats {
 
+    public static String PROG_NAME =
+        System.getProperty( "program.name", "FileNameStats" );
+    public static String PROG_VERSION = "0.1.0";
+
     public static String DEF_PATTERN = "-([0-9]+)$";
-    public static String DEF_STATFILE = "stats.txt";
+    public static String DEF_STATNAME = "stats.txt";
     
     private Pattern pattern = null;
     private long summary = 0;
@@ -128,15 +132,21 @@ public class FileNameStats {
         FileNameStats stats;
 
         if ( args.length > 0 ) {
+            if ( args[0].equals( "-h" ) ||
+                 args[0].equals( "--help" ) ||
+                 args[0].equals( "--usage" ) )
+            {
+                printUsage();
+                System.exit( 0 );
+            }
+                                 
             if ( args.length > 1 ) {
                 stats = new FileNameStats( args[0], args[1] );
             } else {
-                stats = new FileNameStats( args[0],
-                                           FileNameStats.DEF_STATFILE );
+                stats = new FileNameStats( args[0], DEF_STATNAME );
             }
         } else {
-            stats = new FileNameStats( FileNameStats.DEF_PATTERN,
-                                       FileNameStats.DEF_STATFILE );
+            stats = new FileNameStats( DEF_PATTERN, DEF_STATNAME );
         }
 
         try {
@@ -148,6 +158,43 @@ public class FileNameStats {
         } catch ( Exception e ) {
             throw new RuntimeException( e );
         }
+    }
+
+    public static void printUsage() {
+        System.out.print(
+ PROG_NAME + " writes per-directory reports in the given filesystem tree\n" +
+"making arithmetic calculations on file name parts.\n" );
+
+        System.out.println();
+        System.out.print(
+"Usage: " + PROG_NAME + " [ PATTERN ] [ STATSNAME ] [ DIR ]\n"
+);
+        
+        System.out.println();
+        System.out.print(
+"Arguments:\n"
+);
+
+        System.out.println();
+        System.out.print(
+"    PATTERN  the regular expression used to select the files; may contain\n" +
+"             ONE capture group that matches an integer number; use '.*' to\n" +
+"             count all files; *default* value is '" + DEF_PATTERN + "'" +
+                                                           " that\n" +
+"             extracts a number from the end of each filename and results\n" +
+"             in calculation of the sum of these numbers;\n" );
+
+        System.out.println();
+        System.out.println(
+"    STATNAME  the name of the stats-file report written in each" +
+                                                         " recursively\n" +
+"              processed directory; *default* value is '" + DEF_STATNAME +
+                                                                "';\n" );
+
+        System.out.println();
+        System.out.println(
+"    DIR       the directory to traverse into; *default* is the current\n" +
+"              working directory." );
     }
 
 }
