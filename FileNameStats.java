@@ -30,7 +30,7 @@ public class FileNameStats {
         System.getProperty( "program.name", "FileNameStats" );
     public static String PROG_VERSION = "0.1.0";
 
-    public static String DEF_PATTERN = "-([0-9]+)$";
+    public static String DEF_PATTERN = "-([0-9]+)(\\.[^.]+)?$";
     public static String DEF_STATNAME = "stats.txt";
     
     private Pattern pattern = null;
