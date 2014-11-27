@@ -30,7 +30,7 @@ public class FileNameStats {
         System.getProperty( "program.name", "FileNameStats" );
     public static String PROG_VERSION = "0.1.0";
 
-    public static String DEF_PATTERN = "-([0-9]+)(\\.[^.]+)?$";
+    public static String DEF_PATTERN = "(-([0-9]+))?(\\.[^.]+)?$";
     public static String DEF_STATNAME = "stats.txt";
     
     private Pattern pattern = null;
@@ -100,8 +100,17 @@ public class FileNameStats {
         Matcher m = this.pattern.matcher( name );
         if ( m.find() ) {
             if ( m.groupCount() > 0 ) {
-                long weight = Long.parseLong( m.group( 1 ) );
-                return 1 * weight;
+                String weightStr = m.group( 2 );
+                if ( weightStr != null && weightStr.length() > 0 ) {
+                    try {
+                        long weight = Long.parseLong( weightStr );
+                        return 1 * weight;
+                    } catch (Exception e) {
+                        return 1;
+                    }
+                } else {
+                    return 1;
+                }
             } else {
                 return 1;
             }
